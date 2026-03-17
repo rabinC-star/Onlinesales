@@ -20,9 +20,9 @@ export default function ProfilePage() {
             Future backend endpoints can populate user metadata, saved listings, and listing management history.
           </p>
           <ul className="list-inside list-disc space-y-1 text-sm text-slate-500">
-            <li>// TODO: connect profile summary endpoint</li>
-            <li>// TODO: connect seller listings endpoint</li>
-            <li>// TODO: connect saved favorites endpoint</li>
+            <li>{"// TODO: connect profile summary endpoint"}</li>
+            <li>{"// TODO: connect seller listings endpoint"}</li>
+            <li>{"// TODO: connect saved favorites endpoint"}</li>
           </ul>
         </CardContent>
       </Card>

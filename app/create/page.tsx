@@ -44,13 +44,15 @@ const defaultLocation: Location = {
 };
 
 export default function CreateListingPage() {
-  const { register, handleSubmit, watch, reset } = useForm<CreateListingForm>({
+  const { register, handleSubmit, reset } = useForm<CreateListingForm>({
     defaultValues: {
       title: "",
       description: ""
     }
   });
 
+  const [previewTitle, setPreviewTitle] = useState("");
+  const [previewDescription, setPreviewDescription] = useState("");
   const [price, setPrice] = useState(0);
   const [category, setCategory] = useState("");
   const [location, setLocation] = useState<Location>(defaultLocation);
@@ -70,20 +72,19 @@ export default function CreateListingPage() {
   function onSubmit() {
     // TODO: connect create listing form to Java Spring Boot API endpoint
     reset();
+    setPreviewTitle("");
+    setPreviewDescription("");
     setPrice(0);
     setCategory("");
     setLocation(defaultLocation);
     setImagePreviews([]);
   }
 
-  const watchedTitle = watch("title");
-  const watchedDescription = watch("description");
-
   const previewListing = useMemo<Listing>(() => {
     return {
       id: "preview",
-      title: watchedTitle || "Listing title preview",
-      description: watchedDescription || "Listing description preview",
+      title: previewTitle || "Listing title preview",
+      description: previewDescription || "Listing description preview",
       price,
       images: imagePreviews.length
         ? imagePreviews
@@ -101,7 +102,7 @@ export default function CreateListingPage() {
       createdAt: new Date().toISOString(),
       seller: mockUsers[0]
     };
-  }, [watchedTitle, watchedDescription, price, imagePreviews, location, category]);
+  }, [previewTitle, previewDescription, price, imagePreviews, location, category]);
 
   return (
     <section className="grid gap-6 lg:grid-cols-[2fr_1fr]">
@@ -114,12 +115,24 @@ export default function CreateListingPage() {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div className="space-y-1.5">
               <Label htmlFor="title">Title</Label>
-              <Input id="title" placeholder="What are you selling?" {...register("title")} />
+              <Input
+                id="title"
+                placeholder="What are you selling?"
+                {...register("title", {
+                  onChange: (event) => setPreviewTitle(event.target.value)
+                })}
+              />
             </div>
 
             <div className="space-y-1.5">
               <Label htmlFor="description">Description</Label>
-              <Textarea id="description" placeholder="Describe your item" {...register("description")} />
+              <Textarea
+                id="description"
+                placeholder="Describe your item"
+                {...register("description", {
+                  onChange: (event) => setPreviewDescription(event.target.value)
+                })}
+              />
             </div>
 
             <PriceInput value={price} onChange={setPrice} />
